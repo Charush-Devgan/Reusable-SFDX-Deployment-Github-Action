@@ -46,7 +46,7 @@ jobs:
           run: >        
             wget
             https://developer.salesforce.com/media/salesforce-cli/sfdx/channels/stable/sfdx-linux-x64.tar.xz
-  
+            
             mkdir ~/sfdx
   
             tar xJf sfdx-linux-x64.tar.xz -C ~/sfdx --strip-components 1
@@ -56,7 +56,10 @@ jobs:
             ~/sfdx/bin/sfdx version
          
         - name: Setup server key
-          run: echo "${{ secrets.SALESFORCE_JWT_SECRET_KEY }}" > server.key
+          run: > 
+            echo "${{ secrets.SALESFORCE_JWT_SECRET_KEY }}" > server.key
+            
+            sf org login jwt --client-id ${{ secrets.SALESFORCE_CONSUMER_KEY }} --jwt-key-file server.key --username ${{ vars.SALESFORCE_USERNAME }} --set-default-dev-hub -a targetOrg
 
         - name: JWT Authentication to target Org
           run: sf org login jwt --client-id ${{ secrets.SALESFORCE_CONSUMER_KEY }} --jwt-key-file server.key --username ${{ vars.SALESFORCE_USERNAME }} --set-default-dev-hub -a targetOrg

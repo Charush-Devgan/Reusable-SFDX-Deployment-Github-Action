@@ -13,3 +13,4 @@ jobs:
       run-tests: true
       check-only: true
       env: DEV
+      secrets: inherit
